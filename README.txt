@@ -1,1 +1,68 @@
-Gradient-Based Hyperparameter Optimization (HO) on Fashion-MNISTThis project presents an advanced framework for automatic hyperparameter optimization using Gradient-Based Meta-Learning techniques. The objective is to overcome the limitations of manual or random search (Grid/Random Search) by calculating the hypergradient of the validation loss function with respect to the network's learning parameters.Technical FeaturesModular Architecture: The software is engineered into distinct modules (model.py, dataset.py, utils.py, main.py) to ensure maintainability and adherence to Clean Code principles.Layer-wise HPO: The system optimizes four different learning rates in parallel, specifically associated with the three convolutional blocks and the fully-connected block. This granularity allows for the analysis of learning dynamics specific to each level.GPU Memory Optimization:Memory-efficient Implementation: Utilizes both Truncated Reverse-mode AD and Gradient Checkpointing to maximize hardware performance.Gradient Checkpointing: Implemented in model.py to reduce VRAM consumption by storing only critical nodes of the computational graph and recomputing intermediate activations during the backward pass. Truncated Reverse-mode AD: Implementation of truncated automatic differentiation to enable optimization over long trajectories, even in hardware-limited environments (VRAM $\leq$ 4GB). Strategic Data Augmentation: A transformation pipeline including affine rotations, horizontal flips, and contrast jittering to increase model robustness and prevent overfitting.Theoretical FoundationsThe framework implements paradigms defined in key scientific literature:Franceschi et al. (2017): A dynamical systems approach to meta-learning, where training is viewed as the evolution of a state driven by hyperparameters. Maclaurin et al. (2015): Differentiation of the optimization process through the unrolling of the gradient descent algorithm. Constraint Projection: Utilization of logarithmic space for $\lambda$ parameters (LR and WD) to ensure numerical stability and positivity during updates via the Adam optimizer. Project Structuremodel.py: Definition of the CNN with integrated checkpointing mechanisms. dataset.py: Management of data loading and augmentation pipelines for Fashion-MNIST. utils.py: Support functions for reproducibility (seeding), evaluation metrics, and technical plot generation. main.py: System entry point featuring a Command Line Interface (CLI) for experiment selection. Execution InstructionsTo install the necessary dependencies, run:pip install -r Requirements.txtExperiment ModesBaseline: Performs standard training with static hyperparameters to establish a performance benchmark.python main.py --experiment baselineReverse-Mode: Calculates the hypergradient over the entire unrolled trajectory using the higher library.python main.py --experiment reverseTruncated: Executes truncated optimization with periodic weight synchronization to maximize computational efficiency.python main.py --experiment truncatedNote: The optional --augmentation argument can be added to enable advanced transformations on the training data.Output and AnalysisThe system automatically generates graphical reports in the risultati_esperimenti/ directory, including:Loss and Accuracy trends for each epoch.Learned hyperparameter trajectories (per-layer LR and global Weight Decay).Comparative analysis of final results on the test set.Developed for: Advanced analysis of optimization systems in Deep Learning.
+Meta-Learning on FashionMNIST: Hyperparameter Optimization and Data Cleaning
+Overview
+This project demonstrates how to use meta-learning to automatically optimize the training process of a Convolutional Neural Network (CNN). Instead of manually guessing the best hyperparameters (like learning rates) or manually filtering out bad data, this project uses PyTorch and the higher library  to let the model "learn how to learn."
+
+The project tests different approaches on the FashionMNIST dataset, comparing a standard training loop against advanced techniques that adjust parameters dynamically during training.
+
+Project Structure
+main.py: The main entry point. It handles command-line arguments and runs the selected experiment.
+
+model.py: Contains the SimpleFashionCNN architecture.
+
+dataset.py: Manages the FashionMNIST dataset, including train/validation splits, data augmentation, and injecting artificial noise for the data cleaning experiment.
+
+utils.py: Helper functions for training loops, evaluation, early stopping, and generating charts.
+
+genera_tabella.py: A utility script that reads the saved metrics and generates a summary table of the results.
+
+
+requirements.txt: The list of dependencies with locked versions for full reproducibility.
+
+Installation
+It is recommended to use a virtual environment (such as venv or conda) to avoid conflicts with other local packages.
+
+Clone this repository or navigate to the project folder:
+
+Bash
+
+cd path/to/your/project
+Install the required dependencies:
+
+Bash
+
+pip install -r requirements.txt
+How to Run the Experiments
+The project is driven by command-line arguments. You can run four different types of experiments. All results, metrics (JSON), and generated charts (PNG) are automatically saved in the risultati_esperimenti/ folder.
+
+You can append the --augmentation flag to any of these commands to apply data augmentation to the training set.
+
+1. Baseline
+Runs a standard training loop with a fixed learning rate. This serves as the reference point to measure the improvements of the other methods.
+
+Bash
+
+python main.py --experiment baseline
+2. Reverse-Mode Meta-Learning
+This method automatically learns and adjusts the learning rate for each layer of the network, as well as the overall weight decay. It unrolls the inner training loop to calculate exact gradients based on the validation loss.
+
+Bash
+
+python main.py --experiment reverse
+3. Truncated Meta-Learning
+A more memory-efficient version of the reverse-mode. Instead of keeping the entire training history in memory, it synchronizes the model weights at regular intervals. It achieves similar dynamic tuning but uses significantly less RAM.
+
+Bash
+
+python main.py --experiment truncated
+4. Data Hyper-Cleaning
+This experiment tests the model's ability to identify bad data. The dataset is intentionally corrupted with 20% incorrect labels. The meta-learning algorithm learns to assign a "weight" to each training sample, effectively pushing the weights of the corrupted images to zero so the model ignores them.
+
+Bash
+
+python main.py --experiment hyper_cleaning
+Viewing the Results
+After running the experiments, you can generate a clean markdown table summarizing the execution time, memory usage, and final test accuracy for each method:
+
+Bash
+
+python genera_tabella.py
