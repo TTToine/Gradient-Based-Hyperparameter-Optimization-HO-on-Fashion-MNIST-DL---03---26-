@@ -43,7 +43,7 @@ class HyperCleaningDataset(Dataset):
         return img, label, idx
 
 
-def get_dataloaders(batch_size=128, data_dir='./data', use_augmentation=True, corruption_rate=0.2, num_workers=2):
+def get_dataloaders(batch_size=128, data_dir='./data', use_augmentation=True, corruption_rate=0.0, num_workers=2):
     """
     Se use_augmentation=True → applica aug leggera solo al train set.
     """
@@ -59,25 +59,22 @@ def get_dataloaders(batch_size=128, data_dir='./data', use_augmentation=True, co
             transforms.RandomHorizontalFlip(p=0.5),
             transforms.RandomRotation(degrees=10),
             transforms.RandomAffine(degrees=0, translate=(0.08, 0.08), scale=(0.92, 1.08)),
-            transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1),
+            transforms.ColorJitter(brightness=0.1, contrast=0.1)
             transforms.ToTensor(),
             transforms.Normalize(mean=(0.2860,), std=(0.3530,))
         ])
     else:
         train_transform = val_test_transform
-
-    # Caricamento dataset originali
+# Caricamento dataset originali (Creiamo DUE istanze separate per il training set)
     train_full = datasets.FashionMNIST(root=data_dir, train=True, download=True, transform=train_transform)
+    val_full   = datasets.FashionMNIST(root=data_dir, train=True, download=True, transform=val_test_transform) # <-- Nuova istanza senza augmentation
+    
     test_dataset = datasets.FashionMNIST(root=data_dir, train=False, download=True, transform=val_test_transform)
 
     # Split: 20k train, 5k val
     train_subset = Subset(train_full, range(20000))
-    val_dataset  = Subset(train_full, range(20000, 25000))
+    val_dataset  = Subset(val_full, range(20000, 25000)) # prende i dati da val_full
 
-    # per il validation set applichiamo la transform SENZA augmentation
-    val_dataset.dataset.transform = val_test_transform
-
-    # STEP 1: Wrappiamo il train_subset con il nostro HyperCleaningDataset
     train_dataset = HyperCleaningDataset(train_subset, corruption_rate=corruption_rate)
 
     # Inizializzazione dei DataLoader

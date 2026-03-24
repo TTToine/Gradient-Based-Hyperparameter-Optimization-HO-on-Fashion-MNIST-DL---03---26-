@@ -59,8 +59,7 @@ def run_reverse_mode(device, train_loader, val_loader):
     
     # Inizializziamo 4 LR separati (uno per blocco), log(-4.605) = ~0.01
     log_lrs = nn.Parameter(torch.full((4,), -4.605, device=device))  
-    log_wd = nn.Parameter(torch.tensor([-6.907], device=device))  # WD globale
-
+    log_wd = nn.Parameter(torch.tensor(-6.907, device=device))    
     outer_epochs = 30
     K_inner = 35
     num_val_batches = 12
@@ -162,7 +161,7 @@ def run_truncated_mode(device, train_loader, val_loader):
         torch.cuda.reset_peak_memory_stats()
     start_time = time.time()
     log_lrs = nn.Parameter(torch.full((4,), -4.0, device=device))   
-    log_wd = nn.Parameter(torch.tensor([-6.0], device=device))
+    log_wd = nn.Parameter(torch.tensor(-6.0, device=device))
 
     outer_epochs = 40
     inner_steps  = 12
@@ -218,7 +217,7 @@ def run_truncated_mode(device, train_loader, val_loader):
             # Loop interno di training (Truncated)
             for step_idx in range(inner_steps):
                 # Usiamo solo next() pulito
-                images, labels = next(train_iter)
+                images, labels, _ = next(train_iter)
 
                 images = images.to(device)
                 labels = labels.to(device)
@@ -251,9 +250,12 @@ def run_truncated_mode(device, train_loader, val_loader):
                 meta_loss = torch.tensor(0.0, device=device, requires_grad=True)
 
             if meta_loss.grad_fn is None:
-                print("ATTENZIONE: meta_loss non ha grad_fn !")
+                print("AHIA: meta_loss non ha grad_fn !")
 
             meta_loss.backward()
+            val_loss_history.append(meta_loss.item())
+            torch.nn.utils.clip_grad_norm_([log_lrs, log_wd], max_norm=10.0)
+            outer_opt.step()
 
         val_loss_history.append(meta_loss.item())
 
@@ -439,6 +441,7 @@ def main():
         batch_size=args.batch_size,
         data_dir=args.data_dir,
         use_augmentation=args.augmentation,
+        corruption_rate=c_rate,
         num_workers=args.num_workers
     )
 

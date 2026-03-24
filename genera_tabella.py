@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 def genera_tabella():
-    esperimenti = ['baseline', 'truncated', 'reverse', 'hyper_cleaning']
+    esperimenti = ['baseline', 'truncated', 'reverse']
     dati = []
 
     for exp in esperimenti:

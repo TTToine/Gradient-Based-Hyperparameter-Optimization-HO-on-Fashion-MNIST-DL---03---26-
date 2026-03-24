@@ -37,9 +37,13 @@ class SimpleFashionCNN(nn.Module):
         # use_reentrant=False è la best practice raccomandata nelle versioni recenti di PyTorch.
         # dummy_arg è un trucco per forzare il checkpointing anche se l'input x non ha requires_grad=True
         
-        x = checkpoint(self.conv1, x, use_reentrant=False)
-        x = checkpoint(self.conv2, x, use_reentrant=False)
-        x = checkpoint(self.conv3, x, use_reentrant=False)
+        #x = checkpoint(self.conv1, x, use_reentrant=False)
+        #x = checkpoint(self.conv2, x, use_reentrant=False)
+        #x = checkpoint(self.conv3, x, use_reentrant=False)
+
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.conv3(x)
         
         # I layer fully connected pesano molto sui parametri ma poco sulle attivazioni,
         # quindi possiamo lasciarli calcolare normalmente senza rallentare il training.
