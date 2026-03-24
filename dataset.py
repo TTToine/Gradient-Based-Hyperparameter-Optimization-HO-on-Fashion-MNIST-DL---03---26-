@@ -21,7 +21,7 @@ class HyperCleaningDataset(Dataset):
         self.corrupted_indices = set(corrupted_idx_array)
         
         self.corrupted_labels_map = {}
-        print(f"⚠️ Iniezione del rumore: alterazione del {int(self.corruption_rate * 100)}% delle etichette ({num_corrupted} campioni)...")
+        print(f"Iniezione del rumore: alterazione del {int(self.corruption_rate * 100)}% delle etichette ({num_corrupted} campioni)...")
         
         for idx in self.corrupted_indices:
             # Estraiamo l'etichetta originale e la modifichiamo
@@ -43,11 +43,11 @@ class HyperCleaningDataset(Dataset):
         return img, label, idx
 
 
-def get_dataloaders(batch_size=128, data_dir='./data', use_augmentation=True, corruption_rate=0.2):
+def get_dataloaders(batch_size=128, data_dir='./data', use_augmentation=True, corruption_rate=0.2, num_workers=2):
     """
     Se use_augmentation=True → applica aug leggera solo al train set.
     """
-    # Trasformazioni per VALIDATION e TEST (sempre le stesse)
+    # Trasformazioni per VALIDATION e TEST 
     val_test_transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.2860,), std=(0.3530,))
@@ -74,18 +74,32 @@ def get_dataloaders(batch_size=128, data_dir='./data', use_augmentation=True, co
     train_subset = Subset(train_full, range(20000))
     val_dataset  = Subset(train_full, range(20000, 25000))
 
-    # Importante: per il validation set applichiamo la transform SENZA augmentation
+    # per il validation set applichiamo la transform SENZA augmentation
     val_dataset.dataset.transform = val_test_transform
 
     # STEP 1: Wrappiamo il train_subset con il nostro HyperCleaningDataset
     train_dataset = HyperCleaningDataset(train_subset, corruption_rate=corruption_rate)
 
     # Inizializzazione dei DataLoader
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-    val_loader   = DataLoader(val_dataset,   batch_size=batch_size, shuffle=False, num_workers=2)
-    test_loader  = DataLoader(test_dataset,  batch_size=batch_size, shuffle=False, num_workers=2)
-
-    print(f"📦 Dati caricati! Train: {len(train_dataset)} | Val: {len(val_dataset)} | Test: {len(test_dataset)}")
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    val_loader   = DataLoader(val_dataset,   batch_size=batch_size, shuffle=False, num_workers=num_workers)
+    test_loader  = DataLoader(test_dataset,  batch_size=batch_size, shuffle=False, num_workers=num_workers)
+    print(f"Dati caricati! Train: {len(train_dataset)} | Val: {len(val_dataset)} | Test: {len(test_dataset)}")
     print(f"Augmentation attiva sul train: {'Sì' if use_augmentation else 'No'}")
     
     return train_loader, val_loader, test_loader
+
+def get_noisy_val_loader(val_dataset, corruption_rate=0.2, batch_size=128, num_workers=2):
+    """Genera un dataloader di validazione con etichette corrotte per il meta-learning."""
+    noisy_val_dataset = HyperCleaningDataset(
+        subset_dataset=val_dataset,
+        corruption_rate=corruption_rate,
+        num_classes=10
+    )
+    return DataLoader(
+        noisy_val_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=num_workers,
+        pin_memory=True
+    )
