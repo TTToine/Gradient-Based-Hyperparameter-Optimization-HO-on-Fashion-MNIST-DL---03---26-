@@ -175,7 +175,7 @@ def save_experiment_metrics(experiment_name, metrics_dict, save_dir="risultati_e
     with open(filepath, 'w') as f:
         json.dump(metrics_dict, f, indent=4)
         
-    print(f"💾 Metriche salvate con successo in: {filepath}")
+    print(f" Metriche salvate con successo in: {filepath}")
 def analyze_hyper_cleaning(lambdas, corrupted_indices, save_dir="risultati_esperimenti"):
     """
     Confronta i valori di lambda assegnati agli esempi corrotti rispetto a quelli puliti.
@@ -206,7 +206,7 @@ def analyze_hyper_cleaning(lambdas, corrupted_indices, save_dir="risultati_esper
     save_path = os.path.join(save_dir, "hyper_cleaning_distribution.png")
     plt.savefig(save_path, dpi=300)
     plt.show()
-    print(f"📊 Grafico della distribuzione salvato in: {save_path}")
+    print(f"Grafico della distribuzione salvato in: {save_path}")
 def train_with_sample_weights(
     model, optimizer, train_dl, val_dl, sample_weights,
     epochs=15, dev='cuda',
@@ -215,7 +215,7 @@ def train_with_sample_weights(
     min_delta=0.2                # miglioramento minimo in accuracy (%)
 ):
     """
-    Training elegante con pesi per campione + CosineAnnealingLR + Early Stopping.
+    Training con pesi per campione + CosineAnnealingLR + Early Stopping.
     Stessa interfaccia e output di train_and_evaluate.
     """
     criterion_weighted = nn.CrossEntropyLoss(reduction='none')
@@ -284,6 +284,11 @@ def train_with_sample_weights(
                   f"Val Acc: {val_acc:.2f}% | LR: {current_lr:.6f}")
 
     if not early_stopped:
-        print(f"✅ Training completato ({epochs} epoche). Miglior Val Acc: {max(val_accs):.2f}%")
+        print(f" Training completato ({epochs} epoche). Miglior Val Acc: {max(val_accs):.2f}%")
 
     return train_losses, val_accs
+def get_infinite_iterator(dataloader):
+    """Crea un iteratore infinito per i loop interni di meta-learning."""
+    while True:
+        for batch in dataloader:
+            yield batch
