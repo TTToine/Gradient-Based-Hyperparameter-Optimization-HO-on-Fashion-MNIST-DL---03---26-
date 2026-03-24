@@ -106,7 +106,7 @@ def run_reverse_mode(device, train_loader, val_loader):
             # Loop interno di training
             for _ in range(K_inner):
                 # Uso solo next(), l'iteratore gestisce la fine del dataset
-                images, labels = next(train_iter)
+                images, labels, _ = next(train_iter)
                 images, labels = images.to(device), labels.to(device)
                 inner_loss = criterion(fmodel(images), labels)
                 
