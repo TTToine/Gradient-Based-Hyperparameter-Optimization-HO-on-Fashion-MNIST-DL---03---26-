@@ -1,0 +1,12 @@
+# Core Deep Learning & Meta-Learning
+torch==2.1.2
+torchvision==0.16.2
+higher==0.2.1
+
+# Gestione Dati e Utility
+numpy==1.26.4
+pandas==2.2.0
+tqdm==4.66.1
+
+# Visualizzazione
+matplotlib==3.8.2
