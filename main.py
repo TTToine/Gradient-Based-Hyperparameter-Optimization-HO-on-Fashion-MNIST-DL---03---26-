@@ -19,8 +19,6 @@ from utils import (
     save_experiment_metrics,
     train_with_sample_weights  
 )
-from torch.utils.data import Subset, DataLoader
-from torchvision import datasets, transforms
 def run_baseline(device, train_loader, val_loader):
     print("\n🏁 Inizio addestramento Baseline (LR fisso = 0.001)")
     
@@ -257,11 +255,6 @@ def run_truncated_mode(device, train_loader, val_loader):
             torch.nn.utils.clip_grad_norm_([log_lrs, log_wd], max_norm=10.0)
             outer_opt.step()
 
-        val_loss_history.append(meta_loss.item())
-
-        torch.nn.utils.clip_grad_norm_([log_lrs, log_wd], max_norm=10.0)
-        outer_opt.step()
-
         # Sincronizzazione Pesi per il Truncated Meta-Learning
         with torch.no_grad():
             for p_src, p_tgt in zip(fmodel.parameters(), meta_model.parameters()):
@@ -436,6 +429,9 @@ def main():
     print(f" Device attivo: {device}")
     set_seed(29)
     os.makedirs("risultati_esperimenti", exist_ok=True)
+
+    # Label noise is injected only for the hyper-cleaning experiment
+    c_rate = 0.2 if args.experiment == 'hyper_cleaning' else 0.0
 
     train_loader, val_loader, test_loader = get_dataloaders(
         batch_size=args.batch_size,

@@ -59,7 +59,7 @@ def get_dataloaders(batch_size=128, data_dir='./data', use_augmentation=True, co
             transforms.RandomHorizontalFlip(p=0.5),
             transforms.RandomRotation(degrees=10),
             transforms.RandomAffine(degrees=0, translate=(0.08, 0.08), scale=(0.92, 1.08)),
-            transforms.ColorJitter(brightness=0.1, contrast=0.1)
+            transforms.ColorJitter(brightness=0.1, contrast=0.1),
             transforms.ToTensor(),
             transforms.Normalize(mean=(0.2860,), std=(0.3530,))
         ])
