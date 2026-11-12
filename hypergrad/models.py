@@ -52,6 +52,14 @@ class MLP(nn.Module):
         return x
 
 
+def build_model(name: str, num_classes: int = 10) -> nn.Module:
+    if name == "small_cnn":
+        return SmallCNN(num_classes)
+    if name == "mlp":
+        return MLP([28 * 28, 256, num_classes], activation=nn.ReLU)
+    raise ValueError(f"unknown model {name!r}")
+
+
 def param_groups(model: nn.Module) -> dict[str, int]:
     """Map each parameter name to the index of its top-level submodule."""
     order: dict[str, int] = {}

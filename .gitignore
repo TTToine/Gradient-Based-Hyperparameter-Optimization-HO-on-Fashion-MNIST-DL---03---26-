@@ -12,3 +12,6 @@ data/
 risultati_esperimenti/
 *.pt
 *.pth
+
+# Quick (--quick) runs are smoke tests, not results
+results/quick/

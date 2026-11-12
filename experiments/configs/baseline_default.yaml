@@ -1,0 +1,27 @@
+# Baseline: no hyperparameter search. SGD with momentum 0.9, lr = 1e-2 in every layer group
+# (conv1, conv2, conv3, fc), no weight decay.
+name: baseline_default
+method: fixed
+model: small_cnn
+
+data:
+  n_train: 50000
+  n_val: 10000
+  split_seed: 0
+
+hyperparams:
+  lr: 0.01
+  wd: 0.0
+
+train:
+  epochs: 15
+  batch_size: 128
+  momentum: 0.9
+
+# --quick: CPU-sized run (2k training images, 1k validation images, full test set).
+quick:
+  data:
+    n_train: 2000
+    n_val: 1000
+  train:
+    epochs: 10

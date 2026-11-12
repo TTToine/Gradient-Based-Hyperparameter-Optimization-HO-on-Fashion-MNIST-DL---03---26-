@@ -72,3 +72,15 @@ class BilevelProblem:
         """L_val(w), averaged over the given batches. Does not depend on hyperparameters."""
         blist = as_batch_list(batches)
         return sum(self._reduce(self.per_sample_loss(params, b)) for b in blist) / len(blist)
+
+
+def classification_problem(
+    forward: Callable[[Params, Tensor], Tensor], groups: Mapping[str, int]
+) -> BilevelProblem:
+    """Cross-entropy training/validation objectives for a functional classifier."""
+    import torch.nn.functional as F
+
+    def per_sample_loss(params: Params, batch: Batch) -> Tensor:
+        return F.cross_entropy(forward(params, batch["x"]), batch["y"], reduction="none")
+
+    return BilevelProblem(per_sample_loss, groups, reduction="mean")
