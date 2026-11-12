@@ -1,0 +1,18 @@
+[project]
+name = "hypergrad"
+version = "0.1.0"
+description = "Unrolled vs. implicit hypergradients for hyperparameter optimization on Fashion-MNIST"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# Legacy exam code, kept until it is removed in the final phase (see tag v0-exam).
+extend-exclude = ["main.py", "utils.py", "dataset.py", "model.py", "genera_tabella.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "NPY"]

@@ -1,0 +1,14 @@
+# Environments and caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Datasets (downloaded by torchvision)
+data/
+
+# Legacy exam outputs and checkpoints
+risultati_esperimenti/
+*.pt
+*.pth
