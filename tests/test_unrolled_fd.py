@@ -5,6 +5,7 @@ Same initial weights, same minibatches; only the hyperparameter is perturbed.
 
 import math
 
+import pytest
 import torch
 from conftest import make_mlp_problem, minibatches
 
@@ -34,7 +35,8 @@ def finite_difference(opt, params, hp, batches, val, eps=1e-6):
     return fd
 
 
-def test_unrolled_matches_finite_differences():
+@pytest.mark.parametrize("checkpoint_every", [0, 1, 5])
+def test_unrolled_matches_finite_differences(checkpoint_every):
     problem, params, train, val = make_mlp_problem(seed=0)
     opt = DiffSGD(problem, momentum=0.9)
     batches = minibatches(train, batch_size=8, n_steps=12)
@@ -42,7 +44,9 @@ def test_unrolled_matches_finite_differences():
         "log_lr": torch.tensor([math.log(0.1), math.log(0.05)]),
         "log_wd": torch.tensor([math.log(1e-2), math.log(3e-2)]),
     }
-    res = unrolled_hypergrad(opt, params, opt.init_state(params), hp, batches, val)
+    res = unrolled_hypergrad(
+        opt, params, opt.init_state(params), hp, batches, val, checkpoint_every=checkpoint_every
+    )
     fd = finite_difference(opt, params, hp, batches, val)
     for key in hp:
         err = (res.hypergrad[key] - fd[key]).norm() / fd[key].norm()

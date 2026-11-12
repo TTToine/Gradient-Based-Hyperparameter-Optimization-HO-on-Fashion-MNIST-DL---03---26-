@@ -36,19 +36,22 @@ class SmallCNN(nn.Module):
 class MLP(nn.Module):
     """Small MLP; one group per linear layer (fc0, fc1, ...). Smooth tanh by default."""
 
-    def __init__(self, sizes: list[int], activation: type[nn.Module] = nn.Tanh) -> None:
+    def __init__(
+        self, sizes: list[int], activation: type[nn.Module] = nn.Tanh, dropout: float = 0.0
+    ) -> None:
         super().__init__()
         self.n_layers = len(sizes) - 1
         for i, (a, b) in enumerate(zip(sizes[:-1], sizes[1:], strict=True)):
             self.add_module(f"fc{i}", nn.Linear(a, b))
         self.act = activation()
+        self.drop = nn.Dropout(dropout)  # used by the RNG-replay tests of checkpointing
 
     def forward(self, x):
         x = x.flatten(1)
         for i in range(self.n_layers):
             x = getattr(self, f"fc{i}")(x)
             if i < self.n_layers - 1:
-                x = self.act(x)
+                x = self.drop(self.act(x))
         return x
 
 

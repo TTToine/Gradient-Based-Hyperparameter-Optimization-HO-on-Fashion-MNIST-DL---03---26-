@@ -1,5 +1,11 @@
+import os
+
 import pytest
-import torch
+
+# Must be set before CUDA is initialised for deterministic cuBLAS.
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+
+import torch  # noqa: E402
 import torch.nn.functional as F
 
 from hypergrad.functional import get_params, make_forward
@@ -16,11 +22,13 @@ def float64():
     torch.set_default_dtype(old)
 
 
-def make_mlp_problem(seed: int = 0, sizes=(3, 6, 2), n_train: int = 32, n_val: int = 16):
+def make_mlp_problem(
+    seed: int = 0, sizes=(3, 6, 2), n_train: int = 32, n_val: int = 16, dropout: float = 0.0
+):
     """Tiny classification problem on random data, with a smooth (tanh) MLP."""
     g = torch.Generator().manual_seed(seed)
     torch.manual_seed(seed)
-    model = MLP(list(sizes))
+    model = MLP(list(sizes), dropout=dropout)
     forward = make_forward(model)
 
     def per_sample_loss(params, batch):
