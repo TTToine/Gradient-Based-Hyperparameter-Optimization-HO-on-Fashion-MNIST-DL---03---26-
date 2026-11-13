@@ -73,7 +73,7 @@ def code_version() -> dict:
     try:
         return {
             "git_hash": git("rev-parse", "HEAD"),
-            "git_dirty": bool(git("status", "--porcelain")),
+            "git_dirty": bool(git("status", "--porcelain", "--untracked-files=no")),
         }
     except (OSError, subprocess.CalledProcessError):
         return {"git_hash": None, "git_dirty": None}
