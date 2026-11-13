@@ -1,0 +1,537 @@
+{
+ "torch": "2.14.1+cu130",
+ "code": {
+  "git_hash": "c3442ee2c4d9bed250a0ae834577a13f19907e6f",
+  "git_dirty": false
+ },
+ "rows": [
+  {
+   "batch": 128,
+   "K": 10,
+   "checkpoint_every": 0,
+   "status": "ok",
+   "time_s": 0.41480749985203147,
+   "times_s": [
+    0.4646523999981582,
+    0.4007872003130615,
+    0.41480749985203147
+   ],
+   "peak_mb": 1299.8251953125,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 50,
+   "checkpoint_every": 0,
+   "status": "OOM",
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 100,
+   "checkpoint_every": 0,
+   "status": "OOM",
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 200,
+   "checkpoint_every": 0,
+   "status": "OOM",
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 10,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 0.41947760013863444,
+   "times_s": [
+    0.4024374997243285,
+    0.4278004001826048,
+    0.41947760013863444
+   ],
+   "peak_mb": 689.978515625,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 50,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 2.3189765997231007,
+   "times_s": [
+    2.3189765997231007,
+    2.3395476997829974,
+    2.3154329997487366
+   ],
+   "peak_mb": 828.7080078125,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 100,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 4.079578900244087,
+   "times_s": [
+    4.561437199823558,
+    4.079578900244087,
+    4.0238153003156185
+   ],
+   "peak_mb": 1001.166015625,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 200,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 8.918206700123847,
+   "times_s": [
+    8.908572900108993,
+    8.918206700123847,
+    9.145945200230926
+   ],
+   "peak_mb": 1343.2646484375,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 10,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 0.39184270007535815,
+   "times_s": [
+    0.4197940998710692,
+    0.3655854999087751,
+    0.39184270007535815
+   ],
+   "peak_mb": 1025.12109375,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 50,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 1.7477267999202013,
+   "times_s": [
+    2.541299699805677,
+    1.7477267999202013,
+    1.6712274998426437
+   ],
+   "peak_mb": 1311.61669921875,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 100,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 3.382702099625021,
+   "times_s": [
+    3.4299170998856425,
+    3.330740099772811,
+    3.382702099625021
+   ],
+   "peak_mb": 1340.49951171875,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 128,
+   "K": 200,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 6.611596900038421,
+   "times_s": [
+    6.788305800408125,
+    6.440344300121069,
+    6.611596900038421
+   ],
+   "peak_mb": 1400.12744140625,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 10,
+   "checkpoint_every": 0,
+   "status": "ok",
+   "time_s": 0.2613204000517726,
+   "times_s": [
+    0.2613204000517726,
+    0.26381300017237663,
+    0.24603520007804036
+   ],
+   "peak_mb": 1002.1220703125,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 50,
+   "checkpoint_every": 0,
+   "status": "ok",
+   "time_s": 1.2377820000983775,
+   "times_s": [
+    1.2377820000983775,
+    1.2221643002703786,
+    1.250663099810481
+   ],
+   "peak_mb": 2403.0322265625,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 100,
+   "checkpoint_every": 0,
+   "status": "OOM",
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 200,
+   "checkpoint_every": 0,
+   "status": "OOM",
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 10,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 0.3800763003528118,
+   "times_s": [
+    0.40011159982532263,
+    0.37951620016247034,
+    0.3800763003528118
+   ],
+   "peak_mb": 687.0947265625,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 50,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 1.871191400103271,
+   "times_s": [
+    1.8937210999429226,
+    1.8530331999063492,
+    1.871191400103271
+   ],
+   "peak_mb": 819.6728515625,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 100,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 3.8043264001607895,
+   "times_s": [
+    3.8043264001607895,
+    3.847323200199753,
+    3.7143361000344157
+   ],
+   "peak_mb": 990.6044921875,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 200,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 7.452119800262153,
+   "times_s": [
+    7.9251548000611365,
+    7.452119800262153,
+    7.361348500009626
+   ],
+   "peak_mb": 1325.8720703125,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 10,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 0.36892230017110705,
+   "times_s": [
+    0.36817350005730987,
+    0.36892230017110705,
+    0.3902939003892243
+   ],
+   "peak_mb": 691.1142578125,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 50,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 1.7326393998228014,
+   "times_s": [
+    1.7457860000431538,
+    1.7326393998228014,
+    1.7050378997810185
+   ],
+   "peak_mb": 847.89501953125,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 100,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 3.467741800006479,
+   "times_s": [
+    3.467741800006479,
+    3.24294519983232,
+    3.4691405002959073
+   ],
+   "peak_mb": 873.00244140625,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 64,
+   "K": 200,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 7.536310799885541,
+   "times_s": [
+    7.687916800379753,
+    7.536310799885541,
+    6.881817700341344
+   ],
+   "peak_mb": 920.86083984375,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 10,
+   "checkpoint_every": 0,
+   "status": "ok",
+   "time_s": 0.27378869988024235,
+   "times_s": [
+    0.27378869988024235,
+    0.27252749959006906,
+    0.2765648001804948
+   ],
+   "peak_mb": 853.2822265625,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 50,
+   "checkpoint_every": 0,
+   "status": "ok",
+   "time_s": 1.290138099808246,
+   "times_s": [
+    1.3501440002582967,
+    1.290138099808246,
+    1.2838709000498056
+   ],
+   "peak_mb": 1658.6533203125,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 100,
+   "checkpoint_every": 0,
+   "status": "ok",
+   "time_s": 2.771465300116688,
+   "times_s": [
+    3.272253999952227,
+    2.771465300116688,
+    2.5270654000341892
+   ],
+   "peak_mb": 2664.5,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 200,
+   "checkpoint_every": 0,
+   "status": "OOM",
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 10,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 0.3898613997735083,
+   "times_s": [
+    0.3970289002172649,
+    0.3898613997735083,
+    0.38955580024048686
+   ],
+   "peak_mb": 686.333984375,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 50,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 1.9947016001679003,
+   "times_s": [
+    2.140648600179702,
+    1.9925649003125727,
+    1.9947016001679003
+   ],
+   "peak_mb": 818.583984375,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 100,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 4.036353699862957,
+   "times_s": [
+    4.036353699862957,
+    4.050379199907184,
+    3.966515100095421
+   ],
+   "peak_mb": 984.96484375,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 200,
+   "checkpoint_every": 1,
+   "status": "ok",
+   "time_s": 7.586421600077301,
+   "times_s": [
+    7.610146599821746,
+    7.586421600077301,
+    7.551261799875647
+   ],
+   "peak_mb": 1317.544921875,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 10,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 0.3702797000296414,
+   "times_s": [
+    0.3702797000296414,
+    0.35364559991285205,
+    0.37698059994727373
+   ],
+   "peak_mb": 658.80224609375,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 50,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 1.7956118998117745,
+   "times_s": [
+    1.783397600054741,
+    1.7956118998117745,
+    1.8346970002166927
+   ],
+   "peak_mb": 672.1708984375,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 100,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 3.4859163002111018,
+   "times_s": [
+    3.5996414995752275,
+    3.4454490998759866,
+    3.4859163002111018
+   ],
+   "peak_mb": 688.634765625,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  },
+  {
+   "batch": 32,
+   "K": 200,
+   "checkpoint_every": 14,
+   "status": "ok",
+   "time_s": 6.988237299956381,
+   "times_s": [
+    7.048987099900842,
+    6.988237299956381,
+    6.967300899792463
+   ],
+   "peak_mb": 721.0849609375,
+   "base_mb": 279.93798828125,
+   "gpu": "NVIDIA GeForce GTX 1650 Ti",
+   "gpu_total_mb": 4095.6875
+  }
+ ]
+}
