@@ -43,9 +43,11 @@ def run(opt, params, hp, batches, val, every, n_warmup=0, seed=123):
     return res, torch.rand(1)  # also check where the global RNG is left
 
 
-@pytest.mark.parametrize("k", [10, 50])
-@pytest.mark.parametrize("every", [1, 3, 7, 14])
+@pytest.mark.parametrize("k", [10, 23, 50])
+@pytest.mark.parametrize("every", [1, 3, 4, 7, 14])
 def test_checkpointed_equals_full_graph_with_dropout(k, every):
+    """Includes K not divisible by c (e.g. K=50, c=14 and K=23, c=4): the last segment is
+    shorter than c."""
     problem, params, train, val = make_mlp_problem(seed=0, sizes=(5, 16, 16, 3), dropout=0.3)
     opt = DiffSGD(problem, momentum=0.9)
     batches = minibatches(train, batch_size=8, n_steps=k)
@@ -84,7 +86,7 @@ def test_checkpointed_truncated_window():
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="needs CUDA")
-@pytest.mark.parametrize("k", [10, 50])
+@pytest.mark.parametrize("k", [10, 23, 50])
 def test_checkpointed_equals_full_graph_small_cnn_cuda(k, deterministic):
     """The real setting: SmallCNN in float32 on GPU, batch 128, momentum 0.9.
 
@@ -118,6 +120,6 @@ def test_checkpointed_equals_full_graph_small_cnn_cuda(k, deterministic):
     }
     params = get_params(model)
     full, _ = run(opt, params, hp, batches, val, every=0)
-    for every in (1, 14):
+    for every in (1, 4, 14):  # K=23, c=4 and K=50, c=14: last segment shorter
         ckpt, _ = run(opt, params, hp, batches, val, every=every)
         assert rel_err(ckpt.hypergrad, full.hypergrad) < 1e-5, every

@@ -1,15 +1,17 @@
 """Peak GPU memory and wall-clock time of one unrolled hypergradient on SmallCNN.
 
 Grid: inner batch size x unroll length K x checkpoint_every c (0 = full autograd graph).
-Each cell runs in its own process: deterministic kernels, one warm-up call, then
-``torch.cuda.reset_peak_memory_stats`` and ``torch.cuda.synchronize`` around every timed
-call. Memory is ``torch.cuda.max_memory_allocated`` and includes the data set resident on
-the GPU (reported separately as ``base_mb``). A cell that does not fit is reported as OOM.
+Each cell runs in its own process: deterministic kernels, one unmeasured warm-up call of
+the same size (K steps), then ``repeats`` timed calls, each preceded by
+``torch.cuda.reset_peak_memory_stats`` and bracketed by ``torch.cuda.synchronize``.
+Memory is ``torch.cuda.max_memory_allocated`` and includes the data set resident on the
+GPU (reported separately as ``base_mb``). A cell that does not fit is reported as OOM.
 
     python scripts/bench_unrolled_memory.py
-    python scripts/bench_unrolled_memory.py --batch 128 --k 200 --every 1 14
+    python scripts/bench_unrolled_memory.py --batch 128 --k 200 --every 2 4 7
 
-Writes results/benchmarks/unrolled_memory.json and prints a markdown table.
+Writes results/benchmarks/unrolled_memory.json (new cells replace cells with the same
+(batch, K, c); other cells are kept) and prints a markdown table.
 """
 
 import argparse
@@ -61,9 +63,18 @@ def measure(batch: int, k: int, every: int, repeats: int) -> dict:
             checkpoint_every=every,
         )
 
-    row = {"batch": batch, "K": k, "checkpoint_every": every}
+    from hypergrad.experiment import code_version
+
+    row = {
+        "batch": batch,
+        "K": k,
+        "checkpoint_every": every,
+        "repeats": repeats,
+        "n_checkpoints": math.ceil(k / every) if every else 0,
+        "code": code_version(),
+    }
     try:
-        call(min(k, 2))  # warm-up: cuDNN/cuBLAS initialisation
+        call(k)  # unmeasured warm-up of the same size (cuDNN/cuBLAS init, allocator)
         torch.cuda.synchronize()
         times, peaks = [], []
         for _ in range(repeats):
@@ -121,7 +132,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--batch", nargs="+", type=int, default=[128, 64, 32])
     parser.add_argument("--k", nargs="+", type=int, default=[10, 50, 100, 200])
-    parser.add_argument("--every", nargs="+", type=int, default=[0, 1, 14])
+    parser.add_argument("--every", nargs="+", type=int, default=[0, 1, 2, 4, 7, 14])
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--out", default=str(REPO / "results/benchmarks/unrolled_memory.json"))
     parser.add_argument("--cell", nargs=3, type=int, help=argparse.SUPPRESS)
@@ -131,7 +142,12 @@ def main() -> None:
         print(json.dumps(measure(*args.cell, repeats=args.repeats)))
         return
 
-    rows = []
+    out_path = Path(args.out)
+    rows = json.loads(out_path.read_text())["rows"] if out_path.exists() else []
+
+    def key(r):
+        return (r["batch"], r["K"], r["checkpoint_every"])
+
     for b in args.batch:
         for c in args.every:
             for k in args.k:
@@ -157,7 +173,7 @@ def main() -> None:
                     }
                 else:
                     row = json.loads(lines[-1])
-                rows.append(row)
+                rows = [r for r in rows if key(r) != key(row)] + [row]
                 shown = (
                     f"{row['peak_mb']:.0f} MB, {row['time_s']:.2f} s"
                     if row["status"] == "ok"
@@ -167,11 +183,10 @@ def main() -> None:
 
     import torch
 
-    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    with open(args.out, "w", encoding="utf-8") as f:
-        from hypergrad.experiment import code_version
-
-        json.dump({"torch": torch.__version__, "code": code_version(), "rows": rows}, f, indent=1)
+    rows.sort(key=key)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump({"torch": torch.__version__, "rows": rows}, f, indent=1)
     print()
     print(table(rows))
 
